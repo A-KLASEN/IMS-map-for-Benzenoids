@@ -37,6 +37,6 @@ set zrange [-20:200]
 set ticslevel 0 
 set view map 
 set linetype 1 lw 1 lc "black60" 
-splot "R_8_hexagons83_4A.dat" index 8:69 using 1:2:3 with lines notitle 
+splot "R_8_hexagons83_4A.dat" index 8:82 using 1:2:3 with lines notitle 
 # 
 unset multiplot 

@@ -21,13 +21,13 @@ os.mkdir("output")
 
 #fichier ignoré lors du traitement
 open("Non_conforme.txt",'w').close
-reset = False
+
 
 #Lecture des fichiers 1 par 1
 for file_name in os.listdir(PathLecture):
     a = PathLecture + os.path.join(file_name)
     
-    reset = False
+    
     if os.path.isfile(a):
         
         #verifie si l'extension du fichier est un .log 
@@ -46,6 +46,7 @@ for file_name in os.listdir(PathLecture):
             #Scan fichier pour trouver  "Input orientation" et recup Isotropie des Bq
             new_fileISO = []
             for i in range(0,len(loglist)) :
+                reset = False
                 if len(loglist[i]) >= 2 :
                     if loglist[i][0] == "Input" :
                         if loglist[i][1] == "orientation:" :
@@ -280,7 +281,7 @@ for file_name in os.listdir(PathLecture):
                         Xtest = atoms_Num_XYZ[i][1]
                         file_txt_edit.write("\n")
                     file_txt_edit.write(new_fileISO[i-NbrAtoms] + "\n")
-                    print(i-NbrAtoms)
+
                 file_txt_edit.close()
             
 ############################################################################################################            
@@ -329,14 +330,18 @@ for file_name in os.listdir(PathLecture):
                 Bonds = open(BondFile, "r")
                 Bondslu = Bonds.readlines()
                 Bonds.close()
-                
+                Bond = []
                 for Bonds_ligne in Bondslu :
                     Bonds_mots = Bonds_ligne.split()
-                    Index = Index + 1
+                    Bond.append([])
                     for mot in Bonds_mots :
                         Modifier.write(mot + " ")
+                        Bond[Index].append(mot)
                     Modifier.write("\n")
-                    
+                    if len(Bond[Index]) > 0 :
+                        if Bond[Index][0] == "Stop" :
+                            correction = Index +1
+                    Index = Index + 1
                     
                 
                 Modifier.close()
@@ -431,13 +436,22 @@ for file_name in os.listdir(PathLecture):
                 new_file_txt = PathResultat + file_name[0:len(file_name)-4] +".txt"
                 open(new_file_txt,'w').close
                 file_txt_edit = open(new_file_txt, 'a')
-                
-                for i in range(0,NbrAtoms) :
-                    if atoms_Num_XYZ[i][0] == "6" :
-                        file_txt_edit.write("C " + atoms_Num_XYZ[i][1] + " " + atoms_Num_XYZ[i][2] + " " + atoms_Num_XYZ[i][3] + "\n")
-                    if atoms_Num_XYZ[i][0] == "1" :
-                        file_txt_edit.write("H " + atoms_Num_XYZ[i][1] + " " + atoms_Num_XYZ[i][2] + " " + atoms_Num_XYZ[i][3] + "\n")
+                Break = False
 
+                for i in range(0,NbrAtoms) :
+                    X = str(float(atoms_Num_XYZ[i][1]) + float(Bond[i+correction][0]))
+                    Y = str(float(atoms_Num_XYZ[i][2]) + float(Bond[i+correction][1]))
+                    Z = str(float(atoms_Num_XYZ[i][3]) + float(Bond[i+correction][2]))
+                    
+                    
+                    if atoms_Num_XYZ[i][0] == "6" :
+                        file_txt_edit.write("C " + X + " " + Y + " " + Z + "\n")
+                    if atoms_Num_XYZ[i][0] == "1" :
+                        file_txt_edit.write("H " + X + " " + Y + " " + Z + "\n")
+                    # print((atoms_Num_XYZ[i][2] + Bondslu[i+correction][1]))
+                    # print(atoms_Num_XYZ[i][2])
+                    # print(Bondslu[i+correction][1])
+                
                 file_txt_edit.write("\n")
                 
                 #Ecriture des liaisons
@@ -445,10 +459,15 @@ for file_name in os.listdir(PathLecture):
                 for Bonds_ligne in Bondslu :
                     Bonds_mots = Bonds_ligne.split()
                     for mot in Bonds_mots :
+                        if mot == "Stop":
+                            Break = True
+                            break
                         file_txt_edit.write(mot + " ")
                     
                     file_txt_edit.write("\n") 
-                
+                    if Break == True :
+                        break
+                    
                 #ecriture des différentes plaques de BQ
                 Xcount = 1
                 Ycount = 0

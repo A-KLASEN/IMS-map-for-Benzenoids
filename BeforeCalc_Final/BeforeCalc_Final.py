@@ -4,15 +4,9 @@ import os
 from openbabel import openbabel
 import rdkit.Chem
 import numpy as np
-import math as m
-from scipy.spatial.transform import Rotation as R
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-# import quaternion
-
 from skspatial.objects import Plane
 from skspatial.objects import Points
-from skspatial.plotting import plot_3d
+
 
 #destruction ancien "output" et ses fichiers pour reset
 source = os.getcwd()
@@ -100,7 +94,7 @@ def ATOMSlist_xyz(loglist) :
             nbr_H = nbr_H + 1
         init_xyz.append([float(loglist[i][1]),float(loglist[i][2]),float(loglist[i][3])])
         NbrAtoms = NbrAtoms + 1
-    energy = loglist[1][2]
+    energy = loglist[1][1]
     return init_xyz, init_atom, NbrAtoms, nbr_H , energy
 ###############################################################################
 
@@ -364,6 +358,39 @@ def rdkit_bonds_file(init_bonds) :
         file.write("\n\n")
     file.close()   
     
+
+###############################################################################
+    
+def rdkit_bonds_file3D(init_bonds, CoordProject) :
+
+    BondFile = PathResultat + file_name[0:len(file_name)-4] + "_Bonds.dat"
+    open(BondFile,'w').close
+    file = open(BondFile,'a')
+    count = 0
+    for i in range(0,len(init_bonds)) :
+        for x in range(0,len(init_bonds[i])) :
+            file.write(str(init_bonds[i][x]))
+            count = count + 1
+            
+            if count != 3 :
+                file.write(" ")
+            
+            if count == 3 :
+                file.write("\n")
+                count = 0
+        file.write("\n\n")
+    file.write("Stop\n")
+    
+    
+    for i in range(0,len(CoordProject)) :
+        X = str((CoordProject[i][0]/CoordProject[i][3]))
+        Y = str((CoordProject[i][1]/CoordProject[i][3]))
+        Z = str((CoordProject[i][2]/CoordProject[i][3]))
+        file.write(X + " " + Y + " " + Z + "\n")
+    
+    file.close()   
+    
+    
     
 
 ###############################################################################
@@ -496,7 +523,7 @@ def BQ3D_3Dbonds(mdl_file, init_xyz, init_bonds, init_bonds_idx  ) :
             init_bonds[i][n] = init_bonds[i][n] + (CoordProject[init_bonds_idx[i][2]][n-3]/CoordProject[init_bonds_idx[i][2]][3])
     
 
-    return bq_xyz, init_bonds
+    return bq_xyz, init_bonds, CoordProject
 
 ###############################################################################
 
@@ -645,9 +672,9 @@ for file_name in os.listdir(PathLecture):
             mdl_file = rdkit_init(rota_file)
             init_bonds, init_bonds_idx = rdkit_bonds(mdl_file, init_xyz, )
             
-            bq_xyz, init_bonds = BQ3D_3Dbonds(mdl_file, init_xyz, init_bonds, init_bonds_idx  )
+            bq_xyz, init_bonds, CoordProject = BQ3D_3Dbonds(mdl_file, init_xyz, init_bonds, init_bonds_idx  )
             
-            rdkit_bonds_file(init_bonds)
+            rdkit_bonds_file3D(init_bonds, CoordProject)
             
             ecriture(nbr_H, init_atom, init_xyz, bq_xyz, file_name, PathResultat)
             
