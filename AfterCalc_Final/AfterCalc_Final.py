@@ -10,10 +10,10 @@ import math
 source = os.getcwd()
 PathLecture = source + "/input/"
 PathResultat = source + "/output/"
-if os.path.isdir(PathLecture) == False :
-    os.mkdir(PathLecture)
-if os.path.isdir(PathResultat) == False :
-    os.mkdir(PathResultat)
+# if os.path.isdir(PathLecture) == False :
+#     os.mkdir(PathLecture)
+# if os.path.isdir(PathResultat) == False :
+#     os.mkdir(PathResultat)
 
 #destruction ancien "Dossier resultat" et ses fichiers pour reset
 shutil.rmtree("output")
@@ -272,15 +272,15 @@ for file_name in os.listdir(PathLecture):
                         Ytest = atoms_Num_XYZ[i][2]
                     Ycount = Ycount + 1
 
-                file_txt_edit.write("V1 0.1 0 0 " + str(Xcount) + "\n")
-                file_txt_edit.write("V2 0 0.1 0 " + str(Ycount) + "\n\n")
+                file_txt_edit.write("V1 0 0.1 0 " + str(Xcount) + "\n")
+                file_txt_edit.write("V2 0.1 0 0 " + str(Ycount) + "\n\n")
                 Xtest = atoms_Num_XYZ[0][1] 
-                for i in range (NbrAtoms,len(new_fileISO)) :
+                for i in range (NbrAtoms,len(new_fileISO)+NbrAtoms) :
                     if Xtest != atoms_Num_XYZ[i][1] :
                         Xtest = atoms_Num_XYZ[i][1]
                         file_txt_edit.write("\n")
-                    file_txt_edit.write(new_fileISO[i] + "\n")
-                
+                    file_txt_edit.write(new_fileISO[i-NbrAtoms] + "\n")
+                    print(i-NbrAtoms)
                 file_txt_edit.close()
             
 ############################################################################################################            
@@ -306,16 +306,15 @@ for file_name in os.listdir(PathLecture):
                         compteur2 = compteur2 + 1
                     if compteur2 >= compteurEnd :
                         Modifier.write("\n")
-                        # if index == True:
+
                         index1 = index1 +1
-                        # index = True
+
                         compteur2 = 0
-                    # print(i)
-                    # print(atoms_Num_XYZ[i][0])
+
                     
-                    if atoms_Num_XYZ[i][0] != "0" :
-                        print("MAUVAIS")
-                        exit
+                    # if atoms_Num_XYZ[i][0] != "0" :
+                    #     print("MAUVAIS")
+                    #     exit
                     edit = atoms_Num_XYZ[i][1] + " " + atoms_Num_XYZ[i][2] + " " + new_fileISO[i] + "\n"
                     Modifier.write(edit)
                     compteur = compteur +1
@@ -354,7 +353,7 @@ for file_name in os.listdir(PathLecture):
                 #pour size du canvas
                 
                 
-                print(size_X,size_Y)
+                # print(size_X,size_Y)
                 
                 if size_X > size_Y :
                     size_factor = size_X / size_Y
