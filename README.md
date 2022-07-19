@@ -31,7 +31,7 @@ Deuxième étape : AfterCalc
 
 1) Placer les U_name_file.log et R_name_file.log des calculs terminer (ainsi que les name_file_Bonds.dat obtenue précédemment si cela n'a pas encore était fait) dans le dossier "input" de AfterCalc
 
-2) Lancer le programme AfterCalc.py (!!! tous les fichiers présents dans le dossier "output" seront supprimer a l'exécution de AfterCalc.py !!!) 
+2) Lancer le programme AfterCalc.py (Le fichier ims_template_squelette est nécessaire pour le fonctionnement de AfterCalc.py) (!!! tous les fichiers présents dans le dossier "output" seront supprimer a l'exécution de AfterCalc.py !!!)
 
 3) Après l'exécution de AfterCalc.py, les résultats se trouve dans le dossier "output", pour chaque fichier U_... ou R_... dans "input" plusieurs fichiers sont créés dans "output" (les fichiers conservent le nom du fichier d'origine) :
 - U_(or R_)name_file.dat : les données lier au .gnu du même nom pour crée la carte
