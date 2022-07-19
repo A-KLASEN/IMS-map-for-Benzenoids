@@ -1,5 +1,12 @@
 # IMS-map-for-benzenoids
 
+L'utilisation des 2 programmes à pour but de créé des carte d'IMS pour des benzenoids. Un serveur de calcul utilisant Gaussian est nécessaire pour les calculs. Pour le premier programme nommée BeforeCalc plusieurs librairies supplémentaires sont nécessaire :
+- rdkit.Chem
+- numpy
+- scikit-spatial
+
+Plusieurs fichiers ont été laisser dans les input et output, ils sont présents pour servir d'exemple. 
+
 Pour commencer, il est nécessaire d'avoir une structure de benzenoid qui a déjà subis un calcul d'optimisation.
 
 
